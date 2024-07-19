@@ -16,13 +16,14 @@
 -->
 
     <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="estate.action_window">
-      <field name="name">estate window</field>
-      <field name="res_model">estate.estate</field>
+
+    <record id="test_model_action" model="ir.actions.act_window">
+      <field name="name">Estate Property</field>
+      <field name="res_model">estate.property</field>
       <field name="view_mode">tree,form</field>
-    </record>
--->
+  </record>
+  
+
 
     <!-- server action to the one above -->
 <!--
@@ -41,6 +42,7 @@
 -->
 
     <!-- Top menu item -->
+    <menuitem id="test_model_menu_action" action="test_model_action"/>
 <!--
     <menuitem name="estate" id="estate.menu_root"/>
 -->
