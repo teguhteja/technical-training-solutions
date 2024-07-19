@@ -1,10 +1,14 @@
 <odoo>
     <data>
+
+            <!-- Root Menu -->
+            <menuitem id="estate_menu_root" name="Real Estate"/>
         
-        <menuitem id="test_menu_root" name="Test">
-            <menuitem id="test_first_level_menu" name="First Level">
-                <menuitem id="test_model_menu_action" action="test_model_action"/>
-            </menuitem>
-        </menuitem>
+            <!-- First Level Menu -->
+            <menuitem id="estate_menu_properties" name="Properties" parent="estate_menu_root"/>
+        
+            <!-- Action Menu -->
+            <menuitem id="estate_menu_property_action" name="Properties" parent="estate_menu_properties" action="estate.estate_property_action"/>
+        
     </data>
 </odoo>

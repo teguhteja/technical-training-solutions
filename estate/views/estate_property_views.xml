@@ -1,62 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
   <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="estate.list">
-      <field name="name">estate list</field>
-      <field name="model">estate.estate</field>
+    <!-- List View -->
+    <record id="estate_property_view_tree" model="ir.ui.view">
+      <field name="name">estate.property.tree</field>
+      <field name="model">estate.property</field>
       <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
+        <tree string="Properties">
+          <field name="name" />
+          <field name="selling_price" />
+          <field name="bedrooms" />
+          <field name="availability_date" />
         </tree>
       </field>
     </record>
--->
 
-    <!-- actions opening views on models -->
+    <!-- Form View -->
+    <record id="estate_property_view_form" model="ir.ui.view">
+      <field name="name">estate.property.form</field>
+      <field name="model">estate.property</field>
+      <field name="arch" type="xml">
+        <form string="Property">
+          <sheet>
+            <group>
+              <group>
+                <field name="name" />
+                <field name="selling_price" readonly="1" />
+              </group>
+              <group>
+                <field name="bedrooms" default="2" />
+                <field name="availability_date" default="context_today" />
+              </group>
+            </group>
+            <notebook>
+              <page string="Description">
+                <field name="description" />
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
 
-    <record id="test_model_action" model="ir.actions.act_window">
+    <!-- Search View -->
+    <record id="estate_property_view_search" model="ir.ui.view">
+      <field name="name">estate.property.search</field>
+      <field name="model">estate.property</field>
+      <field name="arch" type="xml">
+          <search>
+              <field name="name"/>
+              <field name="postcode"/>
+              <field name="expected_price"/>
+              <field name="bedrooms"/>
+              <field name="living_area" filter_domain="[('living_area', '>=', self)]"/>
+              <field name="facades"/>
+              <field name="garage"/>
+              <field name="garden"/>
+              <filter string="Available" name="available" domain="[('state', 'in', ('new', 'offer_received'))]"/>
+              <group expand="1" string="Group By">
+                  <filter string="Postcode" name='postcode' context="{'group_by':'postcode'}"/>
+              </group>
+          </search>
+      </field>
+  </record>
+
+    <!-- Action for the properties -->
+    <record id="estate_property_action" model="ir.actions.act_window">
       <field name="name">Estate Property</field>
       <field name="res_model">estate.property</field>
       <field name="view_mode">tree,form</field>
-  </record>
-  
-
-
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="estate.action_server">
-      <field name="name">estate server</field>
-      <field name="model_id" ref="model_estate_estate"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
-      </field>
+      <field name="context">{'search_default_available': 1}</field>
     </record>
--->
-
-    <!-- Top menu item -->
-    <menuitem id="test_model_menu_action" action="test_model_action"/>
-<!--
-    <menuitem name="estate" id="estate.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="estate.menu_1" parent="estate.menu_root"/>
-    <menuitem name="Menu 2" id="estate.menu_2" parent="estate.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="estate.menu_1_list" parent="estate.menu_1"
-              action="estate.action_window"/>
-    <menuitem name="Server to list" id="estate" parent="estate.menu_2"
-              action="estate.action_server"/>
--->
   </data>
 </odoo>

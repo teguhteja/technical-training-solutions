@@ -5,6 +5,21 @@ class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "Real Estate Property"
 
+    
+    active = fields.Boolean(default=True)
+    state = fields.Selection(
+        [
+            ('new', 'New'),
+            ('offer_received', 'Offer Received'),
+            ('offer_accepted', 'Offer Accepted'),
+            ('sold', 'Sold'),
+            ('canceled', 'Canceled')
+        ],
+        required=True,
+        default='new',
+        copy=False
+    )
+
     name = fields.Char(required=True, string="Property Name")
     expected_price = fields.Float(required=True, string="Expected Price")
     description = fields.Text()
