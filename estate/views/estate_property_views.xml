@@ -11,6 +11,8 @@
           <field name="selling_price" />
           <field name="bedrooms" />
           <field name="availability_date" />
+          <field name="property_type_id" />
+          <field name="tag_ids" widget="many2many_tags" />
         </tree>
       </field>
     </record>
@@ -21,20 +23,53 @@
       <field name="model">estate.property</field>
       <field name="arch" type="xml">
         <form string="Property">
+          <!-- <header>
+            <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold"/>
+        </header> -->
           <sheet>
+            <div class="oe_title">
+              <h1>
+                  <field name="name"/>
+              </h1>
+              <field name="tag_ids" widget="many2many_tags" />
+          </div>
             <group>
               <group>
-                <field name="name" />
-                <field name="selling_price" readonly="1" />
+                <field name="property_type_id" />
+                <field name="postcode"  />
+                <field name="availability_date" default="context_today" />
+                
               </group>
               <group>
-                <field name="bedrooms" default="2" />
-                <field name="availability_date" default="context_today" />
+                <field name="expected_price" />
+                <field name="selling_price" readonly="1" />
               </group>
             </group>
             <notebook>
               <page string="Description">
-                <field name="description" />
+                <group>
+                  <group>
+                    <field name="description" />
+                    <field name="bedrooms" />
+                    <field name="living_area" />
+                    <field name="facades" />
+                    <field name="garage" />
+                    <field name="garden" />
+                    <field name="garden_area" invisible="garden == False" />
+                    <field name="garden_orientation" invisible="garden == False" />
+                  </group>
+                </group>
+              </page>
+              <page string="Offers">
+                <field name="offer_ids" />
+              </page>
+              <page string="Other Info">
+                <group>
+                  <group>
+                    <field name="seller_id" />
+                    <field name="buyer_id" />
+                  </group>
+                </group>
               </page>
             </notebook>
           </sheet>
@@ -47,22 +82,24 @@
       <field name="name">estate.property.search</field>
       <field name="model">estate.property</field>
       <field name="arch" type="xml">
-          <search>
-              <field name="name"/>
-              <field name="postcode"/>
-              <field name="expected_price"/>
-              <field name="bedrooms"/>
-              <field name="living_area" filter_domain="[('living_area', '>=', self)]"/>
-              <field name="facades"/>
-              <field name="garage"/>
-              <field name="garden"/>
-              <filter string="Available" name="available" domain="[('state', 'in', ('new', 'offer_received'))]"/>
-              <group expand="1" string="Group By">
-                  <filter string="Postcode" name='postcode' context="{'group_by':'postcode'}"/>
-              </group>
-          </search>
+        <search string="Property Search">
+          <field name="name" />
+          <field name="postcode" />
+          <field name="expected_price" />
+          <field name="bedrooms" />
+          <field name="property_type_id" />
+          <field name="living_area" filter_domain="[('living_area', '>=', self)]" />
+          <field name="facades" />
+          <field name="garage" />
+          <field name="garden" />
+          <filter string="Available" name="available"
+            domain="[('state', 'in', ('new', 'offer_received'))]" />
+          <group expand="1" string="Group By">
+            <filter string="Postcode" name='postcode' domain="[]" context="{'group_by':'postcode'}" />
+          </group>
+        </search>
       </field>
-  </record>
+    </record>
 
     <!-- Action for the properties -->
     <record id="estate_property_action" model="ir.actions.act_window">

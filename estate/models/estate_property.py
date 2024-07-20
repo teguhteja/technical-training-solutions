@@ -39,7 +39,11 @@ class EstateProperty(models.Model):
         ('west', 'West'),
     ])
     availability_date = fields.Date(default=lambda self: fields.Date.today() + timedelta(days=90), copy=False)
-   
-
+    
+    property_type_id = fields.Many2one("estate.property.type", string="Property Type")
+    buyer_id = fields.Many2one("res.partner", string="Buyer")
+    seller_id = fields.Many2one("res.users", string="Seller", default=lambda self: self.env.user)
+    tag_ids = fields.Many2many("estate.property.tag", string="Tags")
+    offer_ids = fields.One2many("estate.property.offer", "property_id", string="Offers")
 
 

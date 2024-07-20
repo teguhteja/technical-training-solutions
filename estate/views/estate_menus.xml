@@ -5,10 +5,12 @@
             <menuitem id="estate_menu_root" name="Real Estate"/>
         
             <!-- First Level Menu -->
-            <menuitem id="estate_menu_properties" name="Properties" parent="estate_menu_root"/>
+            <menuitem id="estate_menu_properties" name="Advertisements" parent="estate_menu_root"/>
+            <menuitem id="estate_menu_properties_settings" name="Settings" parent="estate_menu_root"/>
         
             <!-- Action Menu -->
             <menuitem id="estate_menu_property_action" name="Properties" parent="estate_menu_properties" action="estate.estate_property_action"/>
-        
+            <menuitem id="menu_estate_property_tag" name="Property Tags" parent="estate_menu_properties_settings" action="estate.action_property_tag"/>
+            <menuitem id="menu_estate_property_type" name="Property Types" parent="estate_menu_properties_settings" action="action_property_type"/>
     </data>
 </odoo>
