@@ -60,3 +60,17 @@ class EstateProperty(models.Model):
     def _compute_best_price(self):
         for record in self:
             record.best_price = max(record.offer_ids.mapped('price'), default=0)
+            
+    def action_cancel_property(self):
+        for record in self:
+            if record.state == 'sold':
+                raise UserError("Sold property cannot be cancelled")
+            record.state = 'cancelled'
+        return True
+
+    def action_set_sold_property(self):
+        for record in self:
+            if record.state == 'cancelled':
+                raise UserError("Cancelled property cannot be sold")
+            record.state = 'sold'
+        return True

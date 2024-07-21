@@ -23,9 +23,11 @@
       <field name="model">estate.property</field>
       <field name="arch" type="xml">
         <form string="Property">
-          <!-- <header>
-            <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold"/>
-        </header> -->
+          <header>
+            <button name="action_cancel_property" type="object" string="Cancel"/>
+            <button name="action_set_sold_property" type="object" string="Sold"/>    
+            <!-- <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold"/> -->
+        </header>
           <sheet>
             <div class="oe_title">
               <h1>
