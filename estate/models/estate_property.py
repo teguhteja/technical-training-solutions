@@ -27,6 +27,12 @@ class EstateProperty(models.Model):
         default='new',
         copy=False
     )
+    
+    @api.ondelete(at_uninstall=False)
+    def _check_state_before_delete(self):
+        for record in self:
+            if record.state not in ['new', 'canceled']:
+                raise UserError("Only properties with status 'New' or 'Canceled' can be deleted.")
 
     name = fields.Char(required=True, string="Property Name")
     expected_price = fields.Float(required=True, string="Expected Price")

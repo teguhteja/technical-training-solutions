@@ -1,5 +1,6 @@
 from odoo import api, models, fields
 from datetime import timedelta, date
+from odoo.exceptions import ValidationError, UserError
 
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
@@ -33,6 +34,19 @@ class EstatePropertyOffer(models.Model):
     validity = fields.Integer(string="Validity", default=7)
     date_deadline = fields.Date(string="Deadline", compute="_compute_date_deadline", inverse="_inverse_date_deadline")
     create_date = fields.Datetime(string="Create Date", default=fields.Datetime.now)
+
+    @api.model
+    def create(self, vals):
+        property = self.env['estate.property'].browse(vals['property_id'])
+        if property.state not in ['new', 'offer received']:
+            raise UserError("You cannot create an offer for a property not in 'New' or 'Offer Received' state.")
+
+        existing_offers = self.search([('property_id', '=', vals['property_id'])])
+        if any(offer.price >= vals['price'] for offer in existing_offers):
+            raise UserError("The offer price must be higher than existing offers.")
+
+        property.state = 'offer received'
+        return super().create(vals)
 
     @api.depends('create_date', 'validity')
     def _compute_date_deadline(self):
