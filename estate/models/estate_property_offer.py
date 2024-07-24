@@ -1,13 +1,15 @@
 from odoo import api, models, fields
-from datetime import timedelta
+from datetime import timedelta, date
 
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "Property Offer"
+    _order = 'price desc'
 
     _sql_constraints = [
         ('check_offer_price', 'CHECK(price > 0)', 'The offer price must be strictly positive.')
     ]
+
 
     price = fields.Float()
     status = fields.Selection([
@@ -15,8 +17,17 @@ class EstatePropertyOffer(models.Model):
         ('refused', 'Refused')
     ], copy=False)
     partner_id = fields.Many2one("res.partner", required=True)
+    property_type_id = fields.Many2one(
+        related='property_id.property_type_id', store=True)
     offer_amount = fields.Float()
     property_id = fields.Many2one('estate.property', string='Property')
+    state = fields.Selection([
+        ('new', 'New'),
+        ('offer_received', 'Offer Received'),
+        ('offer_accepted', 'Offer Accepted'),
+        ('sold', 'Sold'),
+        ('canceled', 'Canceled')
+    ], string='Property State', compute='_compute_state', store=True)
     # property_id = fields.Many2one("estate.property", required=True)
     
     validity = fields.Integer(string="Validity", default=7)
@@ -46,3 +57,8 @@ class EstatePropertyOffer(models.Model):
         for record in self:
             record.status = 'refused'
         return True
+
+    @api.depends('property_id.state')
+    def _compute_state(self):
+        for record in self:
+            record.state = record.property_id.state if record.property_id else False
