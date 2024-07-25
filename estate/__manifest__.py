@@ -18,11 +18,13 @@ Long description of module's purpose
     'version': '1.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base','web'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'report/estate_report_views.xml',
+        'report/estate_reports.xml',
         'views/estate_property_views.xml',
         'views/estate_property_offer_views.xml',
         'views/estate_property_type_views.xml',
